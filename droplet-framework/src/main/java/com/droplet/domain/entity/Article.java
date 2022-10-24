@@ -3,16 +3,19 @@ package com.droplet.domain.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "droplet_article")
+@Accessors(chain = true)
 public class Article implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,6 +45,12 @@ public class Article implements Serializable {
      * 所属分类id
      */
     private Long categoryId;
+
+    /**
+     * 所属分类名
+     */
+    @TableField(exist = false)
+    private String categoryName;
 
     /**
      * 缩略图

@@ -11,16 +11,28 @@ import com.droplet.domain.vo.HotArticleVo;
 import com.droplet.domain.vo.PageVo;
 import com.droplet.mapper.ArticleMapper;
 import com.droplet.service.ArticleService;
+import com.droplet.service.CategoryService;
 import com.droplet.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.ws.Action;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
+
+    private final CategoryService categoryService;
+
+    @Autowired
+    public ArticleServiceImpl(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
     /**
      * 查询访问量前十的热门文章
      *
@@ -68,9 +80,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 分页设置
         Page<Article> page = new Page<>(pageNum, pageSize);
         page(page, articleLambdaQueryWrapper);
+        // 查询分类名
+        List<Article> articleList = page.getRecords();
+        articleList = articleList.stream()
+                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .collect(Collectors.toList());
 
         // 封装查询结果
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
         PageVo pageVo = new PageVo(articleListVos, page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
