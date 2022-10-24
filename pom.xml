@@ -22,7 +22,7 @@
 
         <spring-boot.version>2.7.4</spring-boot.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <fastjson2.version>2.0.14</fastjson2.version>
+        <fastjson2.version>2.0.15</fastjson2.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <aliyun-oss.version>3.15.2</aliyun-oss.version>
         <easyexcel.version>3.1.1</easyexcel.version>
@@ -52,6 +52,11 @@
             <dependency>
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2-extension</artifactId>
                 <version>${fastjson2.version}</version>
             </dependency>
 
