@@ -25,6 +25,6 @@ public class ArticleController {
      */
     @GetMapping("/hotArticleList")
     public ResponseResult hotArticleList() {
-        ResponseResult responseResult = articleService.getHotArticleList();
+        return articleService.getHotArticleList();
     }
 }
