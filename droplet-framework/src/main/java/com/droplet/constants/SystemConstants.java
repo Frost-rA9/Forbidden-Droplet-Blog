@@ -10,4 +10,6 @@ public class SystemConstants {
      * 正常发布文章
      */
     public static final int ARTICLE_STATUS_NORMAL = 0;
+
+    public static final String STATUS_NORMAL = "0";
 }
