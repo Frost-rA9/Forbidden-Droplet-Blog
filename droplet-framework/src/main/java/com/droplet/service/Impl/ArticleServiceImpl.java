@@ -6,14 +6,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.droplet.constants.SystemConstants;
 import com.droplet.domain.ResponseResult;
 import com.droplet.domain.entity.Article;
+import com.droplet.domain.vo.ArticleListVo;
 import com.droplet.domain.vo.HotArticleVo;
+import com.droplet.domain.vo.PageVo;
 import com.droplet.mapper.ArticleMapper;
 import com.droplet.service.ArticleService;
+import com.droplet.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
@@ -34,12 +38,40 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         List<Article> articleList = page.getRecords();
         // Bean Copy
-        List<HotArticleVo> hotArticleVoList = new ArrayList<>();
+        /* List<HotArticleVo> hotArticleVoList = new ArrayList<>();
         for (Article article : articleList) {
             HotArticleVo articleVo = new HotArticleVo();
             BeanUtils.copyProperties(article, articleVo);
             hotArticleVoList.add(articleVo);
-        }
+        } */
+        List<HotArticleVo> hotArticleVoList = BeanCopyUtils.copyBeanList(articleList, HotArticleVo.class);
         return ResponseResult.okResult(hotArticleVoList);
+    }
+
+    /**
+     * 查询文章列表
+     *
+     * @param pageNum    页码
+     * @param pageSize   页面大小
+     * @param categoryId 分类id
+     * @return 文章列表
+     */
+    @Override
+    public ResponseResult articleList(Integer pageNum, Integer pageSize, Long categoryId) {
+        // 组装查询条件
+        LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        articleLambdaQueryWrapper.eq(Objects.nonNull(categoryId) && categoryId > 0, Article::getCategoryId, categoryId);
+        articleLambdaQueryWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
+        articleLambdaQueryWrapper.orderByDesc(Article::getIsTop);
+
+        // 分页设置
+        Page<Article> page = new Page<>(pageNum, pageSize);
+        page(page, articleLambdaQueryWrapper);
+
+        // 封装查询结果
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
+        PageVo pageVo = new PageVo(articleListVos, page.getTotal());
+        return ResponseResult.okResult(pageVo);
     }
 }
