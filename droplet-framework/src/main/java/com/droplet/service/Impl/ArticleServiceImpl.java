@@ -6,19 +6,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.droplet.constants.SystemConstants;
 import com.droplet.domain.ResponseResult;
 import com.droplet.domain.entity.Article;
+import com.droplet.domain.entity.Category;
+import com.droplet.domain.vo.ArticleDetailVo;
 import com.droplet.domain.vo.ArticleListVo;
 import com.droplet.domain.vo.HotArticleVo;
 import com.droplet.domain.vo.PageVo;
 import com.droplet.mapper.ArticleMapper;
+import com.droplet.mapper.CategoryMapper;
 import com.droplet.service.ArticleService;
-import com.droplet.service.CategoryService;
 import com.droplet.utils.BeanCopyUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.ws.Action;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,11 +25,11 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
-    private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
-    public ArticleServiceImpl(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public ArticleServiceImpl(CategoryMapper categoryMapper) {
+        this.categoryMapper = categoryMapper;
     }
 
     /**
@@ -50,12 +49,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         List<Article> articleList = page.getRecords();
         // Bean Copy
-        /* List<HotArticleVo> hotArticleVoList = new ArrayList<>();
-        for (Article article : articleList) {
-            HotArticleVo articleVo = new HotArticleVo();
-            BeanUtils.copyProperties(article, articleVo);
-            hotArticleVoList.add(articleVo);
-        } */
         List<HotArticleVo> hotArticleVoList = BeanCopyUtils.copyBeanList(articleList, HotArticleVo.class);
         return ResponseResult.okResult(hotArticleVoList);
     }
@@ -83,12 +76,32 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 查询分类名
         List<Article> articleList = page.getRecords();
         articleList = articleList.stream()
-                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .map(article -> article.setCategoryName(categoryMapper.selectById(article.getCategoryId()).getName()))
                 .collect(Collectors.toList());
 
         // 封装查询结果
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
         PageVo pageVo = new PageVo(articleListVos, page.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    /**
+     * 根据id查询文章详情
+     *
+     * @param id 文章id
+     * @return 文章详情
+     */
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        // 查询文章
+        Article article = getById(id);
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        // 查询分类名
+        Long categoryId = articleDetailVo.getCategoryId();
+        Category category = categoryMapper.selectById(categoryId);
+        if (!Objects.isNull(category)) {
+            articleDetailVo.setCategoryName(category.getName());
+        }
+        return ResponseResult.okResult(articleDetailVo);
     }
 }

@@ -7,8 +7,8 @@ import com.droplet.domain.ResponseResult;
 import com.droplet.domain.entity.Article;
 import com.droplet.domain.entity.Category;
 import com.droplet.domain.vo.CategoryVo;
+import com.droplet.mapper.ArticleMapper;
 import com.droplet.mapper.CategoryMapper;
-import com.droplet.service.ArticleService;
 import com.droplet.service.CategoryService;
 import com.droplet.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
-    public ArticleService articleService;
+    private final ArticleMapper articleMapper;
 
     @Autowired
-    public CategoryServiceImpl(ArticleService articleService) {
-        this.articleService = articleService;
+    public CategoryServiceImpl(ArticleMapper articleMapper) {
+        this.articleMapper = articleMapper;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         // 获取文章
         LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         articleLambdaQueryWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
-        List<Article> articleList = articleService.list(articleLambdaQueryWrapper);
+        List<Article> articleList = articleMapper.selectList(articleLambdaQueryWrapper);
 
         // 获取文章分类id，使用Set去重
         Set<Long> categoryIdSet = articleList.stream()
