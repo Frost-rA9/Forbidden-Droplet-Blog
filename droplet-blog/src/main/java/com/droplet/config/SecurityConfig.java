@@ -1,6 +1,9 @@
 package com.droplet.config;
 
 import com.droplet.filter.JwtAuthenticationTokenFilter;
+import com.droplet.handler.security.AccessDeniedHandlerImpl;
+import com.droplet.handler.security.AuthenticationEntryPointImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,8 +22,17 @@ public class SecurityConfig {
 
     private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
-    public SecurityConfig(JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter) {
+    private final AuthenticationEntryPointImpl authenticationEntryPointImpl;
+
+    private final AccessDeniedHandlerImpl accessDeniedHandlerImpl;
+
+    @Autowired
+    public SecurityConfig(JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter,
+                          AuthenticationEntryPointImpl authenticationEntryPointImpl,
+                          AccessDeniedHandlerImpl accessDeniedHandlerImpl) {
         this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
+        this.authenticationEntryPointImpl = authenticationEntryPointImpl;
+        this.accessDeniedHandlerImpl = accessDeniedHandlerImpl;
     }
 
     @Bean
@@ -45,6 +57,11 @@ public class SecurityConfig {
                 // 允许登录接口匿名访问
                 .antMatchers("/login").anonymous()
                 .anyRequest().permitAll();
+
+        // 配置异常处理器
+        http.exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPointImpl)
+                .accessDeniedHandler(accessDeniedHandlerImpl);
 
         http.logout().disable();
         // 将JwtAuthenticationTokenFilter添加到SpringSecurity过滤器链
