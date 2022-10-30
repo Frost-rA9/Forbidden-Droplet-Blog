@@ -46,7 +46,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         // 判断是否认证通过
         if (Objects.isNull(authentication)) {
-            throw new UsernameNotFoundException("用户名或密码错误");
+            throw new RuntimeException("用户名或密码错误");
         }
         // 获取userid，生成token
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
