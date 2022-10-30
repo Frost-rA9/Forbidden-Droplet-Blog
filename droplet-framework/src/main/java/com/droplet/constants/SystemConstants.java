@@ -17,4 +17,9 @@ public class SystemConstants {
      * 友链审核通过
      */
     public static final String LINK_STATUS_NORMAL = "0";
+
+    /**
+     * 博客登录缓存ID
+     */
+    public static final String BLOG_LOGIN_CACHE_ID = "blogLoginId:";
 }
