@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BlogLoginServiceImpl implements BlogLoginService {
@@ -52,7 +53,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         String userId = loginUser.getUser().getId().toString();
         String token = JwtUtil.createJWT(userId);
         // 将用户信息存入redis
-        redisCache.setCacheObject(SystemConstants.BLOG_LOGIN_CACHE_ID + userId, loginUser);
+        redisCache.setCacheObject(SystemConstants.BLOG_LOGIN_CACHE_ID + userId, loginUser, 1, TimeUnit.HOURS);
         // 将token以及userinfo封装 返回
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);
