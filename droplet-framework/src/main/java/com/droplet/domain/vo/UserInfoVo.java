@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
 public class UserInfoVo {
     /**
      * 主键
