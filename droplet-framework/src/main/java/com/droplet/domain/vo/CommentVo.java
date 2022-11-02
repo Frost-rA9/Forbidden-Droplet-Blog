@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -38,7 +39,7 @@ public class CommentVo {
     /**
      * 所回复的目标评论的用户名
      */
-    private Long toCommentUserNmae;
+    private String toCommentUserNmae;
 
     /**
      * 回复目标评论id
@@ -56,5 +57,7 @@ public class CommentVo {
     private Date createTime;
 
     private String username;
+
+    private List<CommentVo> children;
 
 }

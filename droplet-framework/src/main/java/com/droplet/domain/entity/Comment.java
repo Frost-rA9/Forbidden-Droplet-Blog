@@ -3,13 +3,17 @@ package com.droplet.domain.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
+@TableName("droplet_comment")
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;

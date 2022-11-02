@@ -48,14 +48,39 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         page(page, commentLambdaQueryWrapper);
 
         List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
+        commentVoList.forEach(commentVo -> commentVo.setChildren(getChildren(commentVo.getRootId())));
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
     }
 
+    /**
+     * 评论结果转换
+     *
+     * @param commentList 评论列表
+     * @return 结果
+     */
     private List<CommentVo> toCommentVoList(List<Comment> commentList) {
         List<CommentVo> commentVoList = BeanCopyUtils.copyBeanList(commentList, CommentVo.class);
         commentVoList = commentVoList.stream()
-                .peek(commentVo -> commentVo.setUsername(userMapper.selectById(commentVo.getCreateBy()).getUserName()))
+                .peek(commentVo -> {
+                    commentVo.setUsername(userMapper.selectById(commentVo.getCreateBy()).getUserName());
+                    if (commentVo.getToCommentUserId() != -1) {
+                        commentVo.setToCommentUserNmae(userMapper.selectById(commentVo.getToCommentUserId()).getNickName());
+                    }
+                })
                 .collect(Collectors.toList());
         return commentVoList;
+    }
+
+    /**
+     * 查询子评论
+     *
+     * @param rootId 根评论Id
+     * @return 结果
+     */
+    private List<CommentVo> getChildren(Long rootId) {
+        LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        commentLambdaQueryWrapper.eq(Comment::getRootId, rootId);
+        List<Comment> commentList = list(commentLambdaQueryWrapper);
+        return toCommentVoList(commentList);
     }
 }
