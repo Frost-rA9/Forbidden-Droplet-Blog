@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +59,21 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);
         return ResponseResult.okResult(blogUserLoginVo);
+    }
+
+    /**
+     * 推出登录
+     *
+     * @return 结果
+     */
+    @Override
+    public ResponseResult logout() {
+        // 获取token，解析userId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        Long userId = loginUser.getUser().getId();
+        // 删除redis中用户信息
+        redisCache.deleteObject(SystemConstants.BLOG_LOGIN_CACHE_ID + userId);
+        return ResponseResult.okResult();
     }
 }
