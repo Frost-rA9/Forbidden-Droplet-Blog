@@ -10,6 +10,7 @@ import com.droplet.redis.RedisCache;
 import com.droplet.service.BlogLoginService;
 import com.droplet.utils.BeanCopyUtils;
 import com.droplet.utils.JwtUtil;
+import com.droplet.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -68,12 +69,8 @@ public class BlogLoginServiceImpl implements BlogLoginService {
      */
     @Override
     public ResponseResult logout() {
-        // 获取token，解析userId
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long userId = loginUser.getUser().getId();
         // 删除redis中用户信息
-        redisCache.deleteObject(SystemConstants.BLOG_LOGIN_CACHE_ID + userId);
+        redisCache.deleteObject(SystemConstants.BLOG_LOGIN_CACHE_ID + SecurityUtils.getUserId());
         return ResponseResult.okResult();
     }
 }
