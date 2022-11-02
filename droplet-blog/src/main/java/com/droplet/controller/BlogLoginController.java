@@ -21,6 +21,12 @@ public class BlogLoginController {
         this.blogLoginService = blogLoginService;
     }
 
+    /**
+     * 登录
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
     @PostMapping("/login")
     public ResponseResult login(@RequestBody User user) {
         if (!StringUtils.hasText(user.getUserName())) {
@@ -29,8 +35,13 @@ public class BlogLoginController {
         return blogLoginService.login(user);
     }
 
+    /**
+     * 退出登录
+     *
+     * @return 结果
+     */
     @PostMapping("/logout")
-    public ResponseResult logout(){
+    public ResponseResult logout() {
         return blogLoginService.logout();
     }
 }
