@@ -81,7 +81,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private List<CommentVo> getChildren(Long rootId) {
         LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         commentLambdaQueryWrapper.eq(Comment::getRootId, rootId);
-        commentLambdaQueryWrapper.orderByDesc(Comment::getCreateTime);
+        commentLambdaQueryWrapper.orderByAsc(Comment::getCreateTime);
         List<Comment> commentList = list(commentLambdaQueryWrapper);
         return toCommentVoList(commentList);
     }
