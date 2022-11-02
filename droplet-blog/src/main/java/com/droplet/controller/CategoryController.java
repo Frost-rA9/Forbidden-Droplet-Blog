@@ -18,8 +18,13 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    /**
+     * 查询分类列表
+     *
+     * @return 分类列表
+     */
     @GetMapping("/getCategoryList")
-    public ResponseResult getCategoryList(){
+    public ResponseResult getCategoryList() {
         return categoryService.getCategoryList();
     }
 }
