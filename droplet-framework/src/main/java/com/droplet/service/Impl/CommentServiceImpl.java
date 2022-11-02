@@ -40,20 +40,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      */
     @Override
     public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+        // 查询根评论
         LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         commentLambdaQueryWrapper.eq(Comment::getArticleId, articleId);
         commentLambdaQueryWrapper.eq(Comment::getRootId, SystemConstants.BLOG_COMMENT_ROOT);
-
+        // 分页
         Page<Comment> page = new Page<>(pageNum, pageSize);
         page(page, commentLambdaQueryWrapper);
-
         List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
+        // 设置子评论
         commentVoList.forEach(commentVo -> commentVo.setChildren(getChildren(commentVo.getRootId())));
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
     }
 
     /**
-     * 评论结果转换
+     * 评论结果转换（设置昵称）
      *
      * @param commentList 评论列表
      * @return 结果
@@ -80,6 +81,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private List<CommentVo> getChildren(Long rootId) {
         LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         commentLambdaQueryWrapper.eq(Comment::getRootId, rootId);
+        commentLambdaQueryWrapper.orderByDesc(Comment::getCreateTime);
         List<Comment> commentList = list(commentLambdaQueryWrapper);
         return toCommentVoList(commentList);
     }
