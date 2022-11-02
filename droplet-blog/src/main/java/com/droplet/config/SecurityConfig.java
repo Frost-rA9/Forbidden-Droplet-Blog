@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 // 允许登录接口匿名访问
                 .antMatchers("/login").anonymous()
+                .antMatchers("/logout").authenticated()
                 .anyRequest().permitAll();
 
         // 配置异常处理器
