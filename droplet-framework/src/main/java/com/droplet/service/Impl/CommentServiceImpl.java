@@ -6,18 +6,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.droplet.constants.SystemConstants;
 import com.droplet.domain.ResponseResult;
 import com.droplet.domain.entity.Comment;
-import com.droplet.domain.entity.User;
 import com.droplet.domain.vo.CommentVo;
 import com.droplet.domain.vo.PageVo;
+import com.droplet.enums.AppHttpCodeEnum;
+import com.droplet.exception.SystemException;
 import com.droplet.mapper.CommentMapper;
 import com.droplet.mapper.UserMapper;
 import com.droplet.service.CommentService;
 import com.droplet.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +52,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 设置子评论
         commentVoList.forEach(commentVo -> commentVo.setChildren(getChildren(commentVo.getRootId())));
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
+    }
+
+    /**
+     * 新增评论
+     *
+     * @param comment 评论
+     * @return 结果
+     */
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        if (!StringUtils.hasText(comment.getContent())) {
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
     }
 
     /**
