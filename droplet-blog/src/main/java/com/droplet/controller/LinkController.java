@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/link")
 public class LinkController {
 
-    private LinkService linkService;
+    private final LinkService linkService;
 
     @Autowired
     public LinkController(LinkService linkService) {
