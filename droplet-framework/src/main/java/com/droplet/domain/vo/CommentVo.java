@@ -55,4 +55,6 @@ public class CommentVo {
      */
     private Date createTime;
 
+    private String username;
+
 }
