@@ -22,4 +22,9 @@ public class SystemConstants {
      * 博客登录缓存ID
      */
     public static final String BLOG_LOGIN_CACHE_ID = "blogLoginId:";
+
+    /**
+     * 根评论
+     */
+    public static final int BLOG_COMMENT_ROOT = -1;
 }
