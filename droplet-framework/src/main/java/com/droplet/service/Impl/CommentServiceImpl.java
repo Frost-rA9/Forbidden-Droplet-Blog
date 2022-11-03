@@ -34,17 +34,19 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     /**
      * 评论列表
      *
-     * @param articleId 文章Id
-     * @param pageNum   页码
-     * @param pageSize  页面大小
+     * @param commentType
+     * @param articleId   文章Id
+     * @param pageNum     页码
+     * @param pageSize    页面大小
      * @return 结果
      */
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         // 查询根评论
         LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        commentLambdaQueryWrapper.eq(Comment::getArticleId, articleId);
+        commentLambdaQueryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType), Comment::getArticleId, articleId);
         commentLambdaQueryWrapper.eq(Comment::getRootId, SystemConstants.BLOG_COMMENT_ROOT);
+        commentLambdaQueryWrapper.eq(Comment::getType, commentType);
         // 分页
         Page<Comment> page = new Page<>(pageNum, pageSize);
         page(page, commentLambdaQueryWrapper);

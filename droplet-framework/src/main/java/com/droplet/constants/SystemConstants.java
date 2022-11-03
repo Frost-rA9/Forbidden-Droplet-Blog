@@ -27,4 +27,14 @@ public class SystemConstants {
      * 根评论
      */
     public static final int BLOG_COMMENT_ROOT = -1;
+
+    /**
+     * 文章评论
+     */
+    public static final String ARTICLE_COMMENT = "0";
+
+    /**
+     * 友链评论
+     */
+    public static final String LINK_COMMENT = "1";
 }
