@@ -42,6 +42,13 @@ public class CommentController {
         return commentService.addComment(comment);
     }
 
+    /**
+     * 查询友链评论
+     *
+     * @param pageNum  页码
+     * @param pageSize 页面大小
+     * @return 结果
+     */
     @GetMapping("/linkCommentList")
     public ResponseResult linkCommentList(Integer pageNum, Integer pageSize) {
         return commentService.commentList(SystemConstants.LINK_COMMENT, null, pageNum, pageSize);
