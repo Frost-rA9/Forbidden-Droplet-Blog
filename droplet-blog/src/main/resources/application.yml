@@ -1,5 +1,16 @@
 server:
   port: 7777
+  # undertow配置
+  undertow:
+    # undertow编码
+    url-charset: utf-8
+    threads:
+      # undertow 启动初始化线程数
+      io: 100
+      # undertow 最大线程数
+      worker: 800
+    # undertow 每个分区的buffer数量
+    buffer-size: 1024
 # Spring Boot
 spring:
   application:
