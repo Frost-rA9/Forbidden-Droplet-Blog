@@ -243,3 +243,5 @@ dist
 .pnp.*
 
 droplet-framework/src/main/resources/rebel.xml
+droplet-admin/src/main/resources/rebel.xml
+droplet-blog/src/main/resources/rebel.xml
