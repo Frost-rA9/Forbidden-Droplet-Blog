@@ -8,7 +8,7 @@ export function userLogin(username,password) {
         headers: {
             isToken: false
           },
-        data: {'username':username,'password':password}
+        data: {'userName':username,'password':password}
     })
 }
 
