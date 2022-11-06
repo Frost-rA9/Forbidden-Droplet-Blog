@@ -10,13 +10,11 @@ import com.droplet.redis.RedisCache;
 import com.droplet.service.BlogLoginService;
 import com.droplet.utils.BeanCopyUtils;
 import com.droplet.utils.JwtUtil;
-import com.droplet.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -69,8 +67,11 @@ public class BlogLoginServiceImpl implements BlogLoginService {
      */
     @Override
     public ResponseResult logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        Long userId = loginUser.getUser().getId();
         // 删除redis中用户信息
-        redisCache.deleteObject(SystemConstants.BLOG_LOGIN_CACHE_ID + SecurityUtils.getUserId());
+        redisCache.deleteObject(SystemConstants.BLOG_LOGIN_CACHE_ID + userId);
         return ResponseResult.okResult();
     }
 }
