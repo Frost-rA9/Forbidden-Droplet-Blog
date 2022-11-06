@@ -58,3 +58,15 @@ mybatis-plus:
       logic-not-delete-value: 0
       # 主键策略
       id-type: auto
+#阿里云 OSS配置
+oss:
+  accessKeyID: accessKeyID
+  accessKeySecret: accessKeySecret
+  bucketName: bucketName
+  endpoint: endpoint
+# 腾讯云 COS配置
+cos:
+  secretId: secretId
+  secretKey: secretKey
+  region: region
+  bucketName: bucketName
