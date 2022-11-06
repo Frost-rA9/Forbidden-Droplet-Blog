@@ -242,3 +242,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+droplet-framework/src/main/resources/rebel.xml
