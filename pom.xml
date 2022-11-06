@@ -28,6 +28,7 @@
         <easyexcel.version>3.1.1</easyexcel.version>
         <swagger.version>3.0.0</swagger.version>
         <druid.version>1.2.13</druid.version>
+        <qcloud-cos.version>5.6.108</qcloud-cos.version>
     </properties>
 
     <dependencyManagement>
@@ -98,6 +99,13 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
+            </dependency>
+
+            <!-- 腾讯云COS 依赖 -->
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${qcloud-cos.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
