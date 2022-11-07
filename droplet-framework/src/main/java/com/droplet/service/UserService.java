@@ -6,4 +6,6 @@ import com.droplet.domain.entity.User;
 
 public interface UserService extends IService<User> {
     ResponseResult userinfo();
+
+    ResponseResult updateUserInfo(User user);
 }
