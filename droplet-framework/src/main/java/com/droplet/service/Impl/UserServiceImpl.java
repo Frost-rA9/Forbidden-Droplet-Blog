@@ -19,7 +19,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public ResponseResult userinfo() {
-        User user = getById(SecurityUtils.getUserId());
+        Long userId = SecurityUtils.getUserId();
+        User user = getById(userId);
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
         return ResponseResult.okResult(userInfoVo);
     }
