@@ -13,23 +13,41 @@ import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.TransferManagerConfiguration;
 import com.qcloud.cos.transfer.Upload;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Component
 public class QCloudCOSUtil {
-    @Value("${cos.secretId}")
     private static String secretId;
 
-    @Value("${cos.secretKey}")
+    @Value("${cos.secretId}")
+    public void setSecretId(String cosSecretId) {
+        secretId = cosSecretId;
+    }
+
     private static String secretKey;
 
-    @Value("${cos.region}")
+    @Value("${cos.secretKey}")
+    public void setSecretKey(String cosSecretKey) {
+        secretKey = cosSecretKey;
+    }
+
     private static String region;
 
-    @Value("${cos.bucketName}")
+    @Value("${cos.region}")
+    public void setRegion(String cosRegion) {
+        region = cosRegion;
+    }
+
     private static String bucketName;
+
+    @Value("${cos.bucketName}")
+    public void setBucketName(String cosBucketName) {
+        bucketName = cosBucketName;
+    }
 
     private static TransferManager createTransferManager() {
         COSClient cosClient = createCOSClient();
