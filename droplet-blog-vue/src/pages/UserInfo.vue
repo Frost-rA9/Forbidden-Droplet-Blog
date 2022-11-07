@@ -1,7 +1,7 @@
 <!-- 用户中心 -->
 <template>
     <div>
-        <wbc-nav></wbc-nav>
+        <droplet-header></droplet-header>
         <div class="container">
             <div v-show="isEdit" class="tcommonBox">
                 <header>
@@ -158,7 +158,7 @@ import store from '../store'
             }
         },
         components: { //定义组件
-            'wbc-nav':header,
+            'droplet-header':header,
         },
         watch: {
            // 如果路由有变化，会再次执行该方法

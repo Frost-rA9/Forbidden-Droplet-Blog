@@ -1,14 +1,14 @@
 <!-- 文章列表 -->
 <template>
 <div>
-	<sg-nav></sg-nav>
+	<droplet-header></droplet-header>
 	<div class="container">
 		<el-row :gutter="30">
 			<el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
 				<sg-articlelist></sg-articlelist>
 			</el-col>
 			<el-col :sm="24" :md="8">
-				<sg-rightlist></sg-rightlist>
+				<droplet-rightlist></droplet-rightlist>
 			</el-col>
 		</el-row>
 	</div>
@@ -30,9 +30,9 @@ export default {
 
 	},
 	components: { //定义组件
-		'sg-nav': header,
+		'droplet-header': header,
 		'sg-articlelist': articlelist,
-		'sg-rightlist': rightlist,
+		'droplet-rightlist': rightlist,
 	},
 
 	created() { //生命周期函数
