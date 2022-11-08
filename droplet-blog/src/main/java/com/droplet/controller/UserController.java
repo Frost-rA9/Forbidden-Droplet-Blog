@@ -1,5 +1,6 @@
 package com.droplet.controller;
 
+import com.droplet.annotation.SystemLog;
 import com.droplet.domain.ResponseResult;
 import com.droplet.domain.entity.User;
 import com.droplet.service.UserService;
@@ -34,6 +35,7 @@ public class UserController {
      * @return 结果
      */
     @PutMapping("/userInfo")
+    @SystemLog(businessName = "更新用户信息")
     public ResponseResult updateUserInfo(@RequestBody User user) {
         return userService.updateUserInfo(user);
     }
@@ -45,6 +47,7 @@ public class UserController {
      * @return 结果
      */
     @PostMapping("/register")
+    @SystemLog(businessName = "用户注册")
     public ResponseResult register(@RequestBody User user) {
         return userService.register(user);
     }
