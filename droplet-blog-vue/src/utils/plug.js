@@ -26,17 +26,17 @@ import Vue from 'vue'
  */
 
 (function (w, d) {
-  function TheaterJS (options) {
-    var self     = this,
-        defaults = { autoplay: true, erase: true };
+  function TheaterJS(options) {
+    var self = this,
+      defaults = {autoplay: true, erase: true};
 
-    self.events   = {};
-    self.scene    = -1; // iterator through the scenario list
+    self.events = {};
+    self.scene = -1; // iterator through the scenario list
     self.scenario = []; // list of action to execute
-    self.options  = self.utils.merge(defaults, options || {}); // merge defaults with given options
-    self.casting  = {}; // list of described actors
-    self.current  = {}; // actor currently used as params
-    self.state    = "ready"; // theater's state (ready or playing)
+    self.options = self.utils.merge(defaults, options || {}); // merge defaults with given options
+    self.casting = {}; // list of described actors
+    self.current = {}; // actor currently used as params
+    self.state = "ready"; // theater's state (ready or playing)
   }
 
   TheaterJS.prototype = {
@@ -66,21 +66,20 @@ import Vue from 'vue'
     getSayingSpeed: function (filter, constant) {
       if (typeof filter !== "number") {
         constant = filter;
-        filter   = 0;
+        filter = 0;
       }
 
-      var self       = this,
-          experience = self.current.experience + filter,
-          skill      = constant ? experience : self.utils.randomFloat(experience, 1);
+      var self = this,
+        experience = self.current.experience + filter,
+        skill = constant ? experience : self.utils.randomFloat(experience, 1);
 
       return self.utils.getPercentageBetween(1000, 50, skill);
     },
 
 
-
     getInvincibility: function () {
       var self = this;
-      return self.current.experience  * 10;
+      return self.current.experience * 10;
     },
 
 
@@ -102,7 +101,7 @@ import Vue from 'vue'
 
       randomChar: function () {
         var utils = this,
-            chars = "abcdefghijklmnopqrstuvwxyz";
+          chars = "abcdefghijklmnopqrstuvwxyz";
 
         return chars.charAt(utils.randomNumber(0, chars.length - 1));
       },
@@ -134,13 +133,15 @@ import Vue from 'vue'
 
     // When describing a new actor, train merges its attributes with the defaults
     train: function (actor) {
-      var self     = this,
-          defaults = {
-            experience: .6,
-            voice:      function (newValue, newChar, prevChar, str) { console.log(newValue); },
-            type:       "function",
-            model:      ""
-          };
+      var self = this,
+        defaults = {
+          experience: .6,
+          voice: function (newValue, newChar, prevChar, str) {
+            console.log(newValue);
+          },
+          type: "function",
+          model: ""
+        };
 
       return self.utils.merge(defaults, actor);
     },
@@ -150,8 +151,8 @@ import Vue from 'vue'
     describe: function (name, experience, voice) {
       if (typeof name !== "string") throw("actor's name has wrong type: " + typeof name);
 
-      var self  = this,
-          actor = { name: name };
+      var self = this,
+        actor = {name: name};
 
       if (experience !== void 0) actor.experience = experience;
 
@@ -170,27 +171,27 @@ import Vue from 'vue'
 
     // Add a scene to the scenario
     write: function () {
-      var self   = this,
-          scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
-          scene;
+      var self = this,
+        scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
+        scene;
 
       for (var i = 0, l = scenes.length; i < l; i++) {
         scene = scenes[i];
 
         if (typeof scene === "string") {
-          var params   = scene.split(":"),
-              hasActor = params.length > 1,
-              actor    = hasActor ? params[0].trim() : null,
-              speech   = hasActor ? params[1] : params[0];
+          var params = scene.split(":"),
+            hasActor = params.length > 1,
+            actor = hasActor ? params[0].trim() : null,
+            speech = hasActor ? params[1] : params[0];
 
-          if (hasActor) self.write({ name: "actor", args: [actor] });
-          if (self.options.erase && hasActor) self.write({ name: "erase" });
-          self.write({ name: "say", args: [speech, !hasActor] });
+          if (hasActor) self.write({name: "actor", args: [actor]});
+          if (self.options.erase && hasActor) self.write({name: "erase"});
+          self.write({name: "say", args: [speech, !hasActor]});
         } else if (typeof scene === "number") {
-          if (scene < 0) self.write({ name: "erase", args: [scene] });
-          else self.write({ name: "wait", args: [scene] });
+          if (scene < 0) self.write({name: "erase", args: [scene]});
+          else self.write({name: "wait", args: [scene]});
         } else if (typeof scene === "function") {
-          self.write({ name: "call", args: [scene] });
+          self.write({name: "call", args: [scene]});
         } else if (scene instanceof Object) {
           self.scenario.push(scene);
         }
@@ -238,8 +239,8 @@ import Vue from 'vue'
       if (typeof event !== "string") event = void 0;
       else if (event !== void 0 && args === void 0) args = event;
 
-      var self      = this,
-          eventName = scope + (event ? ":" + event : "");
+      var self = this,
+        eventName = scope + (event ? ":" + event : "");
 
       self
         .trigger(eventName, args)
@@ -250,8 +251,8 @@ import Vue from 'vue'
 
 
     trigger: function (eventName, args) {
-      var self   = this,
-          events = self.events[eventName] || [];
+      var self = this,
+        events = self.events[eventName] || [];
 
       (args instanceof Array || (args = [args]));
       for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, [eventName].concat(args));
@@ -271,8 +272,8 @@ import Vue from 'vue'
 
     // Play the next scene
     next: function () {
-      var self      = this,
-          prevScene = self.scenario[self.scene];
+      var self = this,
+        prevScene = self.scenario[self.scene];
 
       if (prevScene) self.emit(prevScene.name, "end", [prevScene.name].concat(prevScene.args));
 
@@ -302,35 +303,35 @@ import Vue from 'vue'
 
 
     say: function (speech, append) {
-      var self       = this,
-          mistaken   = false,
-          invincible = self.getInvincibility(),
-          cursor, model;
+      var self = this,
+        mistaken = false,
+        invincible = self.getInvincibility(),
+        cursor, model;
 
       if (append) {
         // When appending instead of replacing, there's several things we need to do:
         // 1: Keep current value and append
         // 2: Set the cursor to the end of the current model's value
         // 3: Speech becomes model's value + speech
-        model  = self.current.model;
+        model = self.current.model;
         cursor = self.current.model.length - 1;
         speech = model + speech;
       } else {
-        model  = self.current.model = "";
+        model = self.current.model = "";
         cursor = -1;
       }
 
-      var timeout = setTimeout(function nextChar () {
+      var timeout = setTimeout(function nextChar() {
         var prevChar = model.charAt(cursor),
-            newChar, newValue;
+          newChar, newValue;
 
         if (mistaken) {
           // After a mistake, depending on the current actor's experience,
           // there is 0% chance to make a mistake for the x next times.
           invincible = self.getInvincibility();
-          mistaken   = false;
-          newChar    = null;
-          newValue   = model = model.substr(0, cursor);
+          mistaken = false;
+          newChar = null;
+          newValue = model = model.substr(0, cursor);
 
           // Last char erased
           cursor--;
@@ -354,15 +355,15 @@ import Vue from 'vue'
 
 
     erase: function (n) {
-      var self   = this,
-          cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
-          min    = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
+      var self = this,
+        cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
+        min = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
 
       if (cursor < 0) return self.next();
 
-      var timeout = setTimeout(function eraseChar () {
+      var timeout = setTimeout(function eraseChar() {
         var prevChar = self.current.model.charAt(cursor),
-            newValue = self.current.model.substr(0, --cursor);
+          newValue = self.current.model.substr(0, --cursor);
 
         self.set(newValue, [newValue, null, prevChar, newValue]);
 
@@ -376,7 +377,9 @@ import Vue from 'vue'
 
     wait: function (delay) {
       var self = this;
-      setTimeout(function () { self.next(); }, delay);
+      setTimeout(function () {
+        self.next();
+      }, delay);
       return self;
     }
   };
@@ -386,41 +389,44 @@ import Vue from 'vue'
 
 
 //调用
-const Typeit = (isAimee,emId) =>{
-    var theater = new TheaterJS();
-        //使用TheaterJS，你可以建立多个角色，每个角色都有自己的“经验”，它们使用这些“经验”可以互相“交谈”。
-        //上面的代码描述了一个新的角色，名字叫“Vader”，它的“经验”值为0.8（必须是0-1之间），它的voice是“#vader”。voice将用于打印的文字，Vader是一个html元素。
-        /***voice可以是两种类型：
-            一个HTML元素（或一个CSS选择器），元素的innerHTML将被用于设置voice。
-            用4个参数调用的函数：
-            newValue：新的speech值。
-            newChar：新的打印字符。
-            prevChar：前一个字符。
-            speech：所有的speech。
-         ***/
+const Typeit = (isAimee, emId) => {
+  var theater = new TheaterJS();
+  //使用TheaterJS，你可以建立多个角色，每个角色都有自己的“经验”，它们使用这些“经验”可以互相“交谈”。
+  //上面的代码描述了一个新的角色，名字叫“Vader”，它的“经验”值为0.8（必须是0-1之间），它的voice是“#vader”。voice将用于打印的文字，Vader是一个html元素。
+  /***voice可以是两种类型：
+   一个HTML元素（或一个CSS选择器），元素的innerHTML将被用于设置voice。
+   用4个参数调用的函数：
+   newValue：新的speech值。
+   newChar：新的打印字符。
+   prevChar：前一个字符。
+   speech：所有的speech。
+   ***/
 
-        var world = "Droplet"
-        theater.describe("Luke", .9, emId);
-        // conosle.log()
-        theater.on("*", function (eventName, originalEvent, sceneName, arg) {//做点什么
+  var world = "Droplet"
+  theater.describe("Luke", .9, emId);
+  // conosle.log()
+  theater.on("*", function (eventName, originalEvent, sceneName, arg) {//做点什么
 
-                })
-                .on("say:start, erase:start", function (eventName) {//添加闪烁的插入符号
-                    var self    = this,current = self.current.voice;
-                    self.utils.addClass(current, "saying");
-                })
-                .on("say:end, erase:end", function (eventName) {//消除闪烁的插入符号
-                    var self    = this,current = self.current.voice;
-                    self.utils.removeClass(current, "saying");
-                });
+  })
+    .on("say:start, erase:start", function (eventName) {//添加闪烁的插入符号
+      var self = this, current = self.current.voice;
+      self.utils.addClass(current, "saying");
+    })
+    .on("say:end, erase:end", function (eventName) {//消除闪烁的插入符号
+      var self = this, current = self.current.voice;
+      self.utils.removeClass(current, "saying");
+    });
 
-        theater
-                .write("Luke:Hello!",1000)
-//                .write("Vader:I am your father.", toggleClass)
-                .write("Luke:Hi,"+world, 500)
-                .write({ name: "call", args: [kill, true] })
-                .write(function () { theater.play(true); });
-        function kill () {
+  theater
+    .write("Luke:Hello!", 1000)
+    //                .write("Vader:I am your father.", toggleClass)
+    .write("Luke:Hi," + world, 500)
+    .write({name: "call", args: [kill, true]})
+    .write(function () {
+      theater.play(true);
+    });
+
+  function kill() {
 //             var self    = this,
 //                     delay   = 500,
 //                     i       = 0,
@@ -431,10 +437,10 @@ const Typeit = (isAimee,emId) =>{
 //                         clearTimeout(timeout);
 //                     }, delay);
 
-            return self;
-        }
+    return self;
+  }
 }
 
 export {
-    Typeit//打字效果
+  Typeit//打字效果
 }

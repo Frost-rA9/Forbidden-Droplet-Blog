@@ -3,7 +3,7 @@
     <div>
         <div class="container">
             <h1 class="loginTitle">
-                
+
             </h1>
             <!-- 登录注册 -->
             <div v-show="!err2005" class="">
@@ -153,7 +153,6 @@ export default {
         that.$route.query.urlstate == undefined
           ? 0
           : that.$route.query.urlstate; //获取传参的usrlstate状态码
-      // console.log(that.login,that.urlstate);
     },
     loginEnterFun: function(e) {
       var keyCode = window.event ? e.keyCode : e.which;

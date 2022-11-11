@@ -24,17 +24,17 @@
  */
 
 (function (w, d) {
-  function TheaterJS (options) {
-    var self     = this,
-        defaults = { autoplay: true, erase: true };
+  function TheaterJS(options) {
+    var self = this,
+      defaults = {autoplay: true, erase: true};
 
-    self.events   = {};
-    self.scene    = -1; // iterator through the scenario list
+    self.events = {};
+    self.scene = -1; // iterator through the scenario list
     self.scenario = []; // list of action to execute
-    self.options  = self.utils.merge(defaults, options || {}); // merge defaults with given options
-    self.casting  = {}; // list of described actors
-    self.current  = {}; // actor currently used as params
-    self.state    = "ready"; // theater's state (ready or playing)
+    self.options = self.utils.merge(defaults, options || {}); // merge defaults with given options
+    self.casting = {}; // list of described actors
+    self.current = {}; // actor currently used as params
+    self.state = "ready"; // theater's state (ready or playing)
   }
 
   TheaterJS.prototype = {
@@ -64,21 +64,20 @@
     getSayingSpeed: function (filter, constant) {
       if (typeof filter !== "number") {
         constant = filter;
-        filter   = 0;
+        filter = 0;
       }
 
-      var self       = this,
-          experience = self.current.experience + filter,
-          skill      = constant ? experience : self.utils.randomFloat(experience, 1);
+      var self = this,
+        experience = self.current.experience + filter,
+        skill = constant ? experience : self.utils.randomFloat(experience, 1);
 
       return self.utils.getPercentageBetween(1000, 50, skill);
     },
 
 
-
     getInvincibility: function () {
       var self = this;
-      return self.current.experience  * 10;
+      return self.current.experience * 10;
     },
 
 
@@ -100,7 +99,7 @@
 
       randomChar: function () {
         var utils = this,
-            chars = "abcdefghijklmnopqrstuvwxyz";
+          chars = "abcdefghijklmnopqrstuvwxyz";
 
         return chars.charAt(utils.randomNumber(0, chars.length - 1));
       },
@@ -132,13 +131,15 @@
 
     // When describing a new actor, train merges its attributes with the defaults
     train: function (actor) {
-      var self     = this,
-          defaults = {
-            experience: .6,
-            voice:      function (newValue, newChar, prevChar, str) { console.log(newValue); },
-            type:       "function",
-            model:      ""
-          };
+      var self = this,
+        defaults = {
+          experience: .6,
+          voice: function (newValue, newChar, prevChar, str) {
+            console.log(newValue);
+          },
+          type: "function",
+          model: ""
+        };
 
       return self.utils.merge(defaults, actor);
     },
@@ -148,8 +149,8 @@
     describe: function (name, experience, voice) {
       if (typeof name !== "string") throw("actor's name has wrong type: " + typeof name);
 
-      var self  = this,
-          actor = { name: name };
+      var self = this,
+        actor = {name: name};
 
       if (experience !== void 0) actor.experience = experience;
 
@@ -168,27 +169,27 @@
 
     // Add a scene to the scenario
     write: function () {
-      var self   = this,
-          scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
-          scene;
+      var self = this,
+        scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
+        scene;
 
       for (var i = 0, l = scenes.length; i < l; i++) {
         scene = scenes[i];
 
         if (typeof scene === "string") {
-          var params   = scene.split(":"),
-              hasActor = params.length > 1,
-              actor    = hasActor ? params[0].trim() : null,
-              speech   = hasActor ? params[1] : params[0];
+          var params = scene.split(":"),
+            hasActor = params.length > 1,
+            actor = hasActor ? params[0].trim() : null,
+            speech = hasActor ? params[1] : params[0];
 
-          if (hasActor) self.write({ name: "actor", args: [actor] });
-          if (self.options.erase && hasActor) self.write({ name: "erase" });
-          self.write({ name: "say", args: [speech, !hasActor] });
+          if (hasActor) self.write({name: "actor", args: [actor]});
+          if (self.options.erase && hasActor) self.write({name: "erase"});
+          self.write({name: "say", args: [speech, !hasActor]});
         } else if (typeof scene === "number") {
-          if (scene < 0) self.write({ name: "erase", args: [scene] });
-          else self.write({ name: "wait", args: [scene] });
+          if (scene < 0) self.write({name: "erase", args: [scene]});
+          else self.write({name: "wait", args: [scene]});
         } else if (typeof scene === "function") {
-          self.write({ name: "call", args: [scene] });
+          self.write({name: "call", args: [scene]});
         } else if (scene instanceof Object) {
           self.scenario.push(scene);
         }
@@ -236,8 +237,8 @@
       if (typeof event !== "string") event = void 0;
       else if (event !== void 0 && args === void 0) args = event;
 
-      var self      = this,
-          eventName = scope + (event ? ":" + event : "");
+      var self = this,
+        eventName = scope + (event ? ":" + event : "");
 
       self
         .trigger(eventName, args)
@@ -248,8 +249,8 @@
 
 
     trigger: function (eventName, args) {
-      var self   = this,
-          events = self.events[eventName] || [];
+      var self = this,
+        events = self.events[eventName] || [];
 
       (args instanceof Array || (args = [args]));
       for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, [eventName].concat(args));
@@ -269,8 +270,8 @@
 
     // Play the next scene
     next: function () {
-      var self      = this,
-          prevScene = self.scenario[self.scene];
+      var self = this,
+        prevScene = self.scenario[self.scene];
 
       if (prevScene) self.emit(prevScene.name, "end", [prevScene.name].concat(prevScene.args));
 
@@ -300,35 +301,35 @@
 
 
     say: function (speech, append) {
-      var self       = this,
-          mistaken   = false,
-          invincible = self.getInvincibility(),
-          cursor, model;
+      var self = this,
+        mistaken = false,
+        invincible = self.getInvincibility(),
+        cursor, model;
 
       if (append) {
         // When appending instead of replacing, there's several things we need to do:
         // 1: Keep current value and append
         // 2: Set the cursor to the end of the current model's value
         // 3: Speech becomes model's value + speech
-        model  = self.current.model;
+        model = self.current.model;
         cursor = self.current.model.length - 1;
         speech = model + speech;
       } else {
-        model  = self.current.model = "";
+        model = self.current.model = "";
         cursor = -1;
       }
 
-      var timeout = setTimeout(function nextChar () {
+      var timeout = setTimeout(function nextChar() {
         var prevChar = model.charAt(cursor),
-            newChar, newValue;
+          newChar, newValue;
 
         if (mistaken) {
           // After a mistake, depending on the current actor's experience,
           // there is 0% chance to make a mistake for the x next times.
           invincible = self.getInvincibility();
-          mistaken   = false;
-          newChar    = null;
-          newValue   = model = model.substr(0, cursor);
+          mistaken = false;
+          newChar = null;
+          newValue = model = model.substr(0, cursor);
 
           // Last char erased
           cursor--;
@@ -352,15 +353,15 @@
 
 
     erase: function (n) {
-      var self   = this,
-          cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
-          min    = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
+      var self = this,
+        cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
+        min = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
 
       if (cursor < 0) return self.next();
 
-      var timeout = setTimeout(function eraseChar () {
+      var timeout = setTimeout(function eraseChar() {
         var prevChar = self.current.model.charAt(cursor),
-            newValue = self.current.model.substr(0, --cursor);
+          newValue = self.current.model.substr(0, --cursor);
 
         self.set(newValue, [newValue, null, prevChar, newValue]);
 
@@ -374,7 +375,9 @@
 
     wait: function (delay) {
       var self = this;
-      setTimeout(function () { self.next(); }, delay);
+      setTimeout(function () {
+        self.next();
+      }, delay);
       return self;
     }
   };
