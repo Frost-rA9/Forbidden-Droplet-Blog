@@ -37,4 +37,9 @@ public class SystemConstants {
      * 友链评论
      */
     public static final String LINK_COMMENT = "1";
+
+    /**
+     * 浏览量缓存KEY
+     */
+    public static final String VIEW_COUNT_CACHE_ID = "article:viewCount";
 }
