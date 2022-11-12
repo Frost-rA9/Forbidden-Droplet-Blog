@@ -123,10 +123,10 @@ export default {
       catchMeObj: {
         //个人信息
         git: "https://gitee.com",
-        qq: "/static/img/qq.png",
+        qq: "https://im.qq.com/index",
         sina: "https://weibo.com",
-        wechat: "/static/img/qq.jpg",
-        csdn: "http://www.csdn.cn",
+        wechat: "https://weixin.qq.com/",
+        csdn: "https://www.csdn.net/",
         job: "https://www.baidu.com",
       },
     };

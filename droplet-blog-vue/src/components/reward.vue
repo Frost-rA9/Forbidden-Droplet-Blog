@@ -17,8 +17,8 @@
       </div>
       <h1>赞赏说明：</h1>
       <p>
-        如果我的课程对你有所帮助，你可以请作者喝杯咖啡表示鼓励
-        ☕️)请备注留下你的姓名/昵称方便我公布赞赏记录。
+        若博客内的文章对你有帮助，你可以请作者喝杯咖啡表示鼓励
+        ☕️)请备注留下你的姓名/昵称方便公布赞赏记录。
       </p>
       <hr/>
       <h1>赞赏方式：</h1>
@@ -42,7 +42,7 @@
               :src="
                 rewardData.alipay_image
                   ? rewardData.alipay_image
-                  : 'static/img/ali_pay.jpg'
+                  : 'static/img/ali_pay.png'
               "
               :onerror="$store.state.errorImg"
             />
@@ -78,24 +78,7 @@ export default {
     //选项 / 数据
     return {
       rewardData: "", //赞赏二维码
-      tableData: [
-        {
-          //赞赏数据
-          "payTime": "2021-10-23",
-          "name": "智障少女欢乐多",
-          "money": "188"
-        },
-        {
-          "payTime": "2021-10-28",
-          "name": "刺猬",
-          "money": "50"
-        },
-        {
-          "payTime": "2021-11-03",
-          "name": "迅捷小鹿",
-          "money": "30"
-        },
-      ],
+      tableData: [],
     };
   },
   methods: {

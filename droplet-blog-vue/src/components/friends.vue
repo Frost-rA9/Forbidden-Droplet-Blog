@@ -5,7 +5,7 @@
       <h3> 网站名称: 禁忌的一滴</h3>
       <h3>网站地址: https://www.forbidden-droplet.com </h3>
       <h3>网站描述: 百度你懂的</h3>
-      <h3>网站logo: https://www.sg.com/1.png</h3>
+      <h3>网站logo: https://www.forbidden-droplet.com/1.png</h3>
 
     </h1>
     <el-row>
