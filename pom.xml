@@ -20,7 +20,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring-boot.version>2.7.4</spring-boot.version>
+        <spring-boot.version>2.7.5</spring-boot.version>
         <jjwt.version>0.9.1</jjwt.version>
         <fastjson2.version>2.0.15</fastjson2.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
