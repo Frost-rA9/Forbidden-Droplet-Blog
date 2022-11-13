@@ -34,7 +34,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     /**
      * 评论列表
      *
-     * @param commentType
+     * @param commentType 评论类型
      * @param articleId   文章Id
      * @param pageNum     页码
      * @param pageSize    页面大小
@@ -52,7 +52,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         page(page, commentLambdaQueryWrapper);
         List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
         // 设置子评论
-        commentVoList.forEach(commentVo -> commentVo.setChildren(getChildren(commentVo.getRootId())));
+        commentVoList.forEach(commentVo -> commentVo.setChildren(getChildren(commentVo.getId())));
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
     }
 
