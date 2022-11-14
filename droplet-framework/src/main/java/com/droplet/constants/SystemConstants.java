@@ -24,6 +24,11 @@ public class SystemConstants {
     public static final String BLOG_LOGIN_CACHE_ID = "blogLoginId:";
 
     /**
+     * 后台登录缓存ID
+     */
+    public static final String ADMIN_LOGIN_CACHE_ID = "adminLoginId:";
+
+    /**
      * 根评论
      */
     public static final int BLOG_COMMENT_ROOT = -1;
