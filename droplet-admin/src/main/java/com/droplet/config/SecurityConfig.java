@@ -55,10 +55,10 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 允许登录接口匿名访问
-                // .antMatchers("/login").anonymous()
+                .antMatchers("/user/login").anonymous()
                 // .antMatchers("/logout").authenticated()
                 // .antMatchers("/user/userInfo").authenticated()
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
 
         // 配置异常处理器
         http.exceptionHandling()
